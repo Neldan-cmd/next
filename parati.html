@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrusel para ti 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Playfair Display', serif;
+      overflow: hidden;
+    }
+
+    .carousel {
+      position: relative;
+      width: 500px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .carousel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255, 182, 193, 0.1), rgba(255, 105, 180, 0.1));
+      border-radius: 30px;
+      z-index: 1;
+    }
+
+    .carousel-item {
+      display: none;
+      font-size: 28px;
+      text-align: center;
+      color: #2c3e50;
+      line-height: 1.6;
+      font-family: 'Dancing Script', cursive;
+      font-weight: 700;
+      padding: 40px;
+      animation: fadeInScale 1s ease-out;
+      z-index: 2;
+      position: relative;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .carousel-item.active {
+      display: block;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .love-image {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      position: relative;
+      animation: fadeInScale 1s ease-out;
+    }
+
+    .love-image.active {
+      display: flex;
+    }
+
+    .heart-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .heart {
+      width: 120px;
+      height: 108px;
+      position: relative;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 96px;
+      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      border-radius: 60px 60px 0 0;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+
+    .heart::after {
+      left: 60px;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .love-message {
+      font-family: 'Great Vibes', cursive;
+      font-size: 48px;
+      color: #e74c3c;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      margin-bottom: 15px;
+    }
+
+    .sub-message {
+      font-family: 'Dancing Script', cursive;
+      font-size: 22px;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 30px;
+      z-index: 3;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      border: none;
+      color: white;
+      padding: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+      transition: all 0.3s ease;
+      font-size: 18px;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 12px 25px rgba(255, 107, 107, 0.6);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(1);
+    }
+
+    .progress-bar {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 107, 107, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .progress-dot.active {
+      background: #ff6b6b;
+      transform: scale(1.2);
+    }
+
+    .floating-hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-heart {
+      position: absolute;
+      color: rgba(255, 182, 193, 0.6);
+      font-size: 20px;
+      animation: float 8s linear infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-hearts" id="floatingHearts"></div>
+  
+  <div class="carousel">
+    <div class="carousel-item active">
+  Eres el latido más hermoso de mi corazón, la melodía que acompaña mis días y la razón por la que sonrío incluso en los momentos más difíciles 💕
+</div>
+
+<div class="carousel-item">
+  Tu luz transforma mis días en eternas primaveras; contigo, hasta la rutina se convierte en magia y cada instante brilla como una nueva esperanza ✨
+</div>
+
+<div class="carousel-item">
+  Doy gracias a la vida por regalarme tu existencia; desde que llegaste, todo tiene un sentido más profundo, como si el universo hubiera conspirado para unirnos 💖
+</div>
+
+<div class="carousel-item">
+  Eres el sueño que jamás quiero despertar, la ilusión que me envuelve al cerrar los ojos y la realidad más hermosa cuando los abro 🌙
+</div>
+
+<div class="carousel-item">
+  A tu lado, el mundo cobra magia: las estrellas parecen más cercanas, el tiempo más amable y mi vida más completa con cada segundo que compartimos 🌸
+</div>
+
+
+    <div class="love-image" id="loveImage">
+      <div class="heart-container">
+        <div class="heart"></div>
+      </div>
+      <div class="love-message">Te Amo</div>
+      <div class="sub-message">Con todo mi corazón 💖</div>
+    </div>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="controls">
+      <button class="btn" onclick="prev()" title="Anterior">‹</button>
+      <button class="btn" onclick="next()" title="Siguiente">›</button>
+    </div>
+  </div>
+
+  <script>
+    let index = 0;
+    const items = document.querySelectorAll('.carousel-item');
+    const loveImage = document.getElementById('loveImage');
+    const progressBar = document.getElementById('progressBar');
+    const totalItems = items.length + 1; // +1 para la imagen final
+
+    // Crear puntos de progreso
+    function createProgressDots() {
+      for (let i = 0; i < totalItems; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('progress-dot');
+        if (i === 0) dot.classList.add('active');
+        progressBar.appendChild(dot);
+      }
+    }
+
+    // Actualizar puntos de progreso
+    function updateProgressDots() {
+      const dots = document.querySelectorAll('.progress-dot');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    function showItem(i) {
+      // Ocultar todos los elementos
+      items.forEach(item => item.classList.remove('active'));
+      loveImage.classList.remove('active');
+
+      if (i < items.length) {
+        items[i].classList.add('active');
+      } else if (i === items.length) {
+        loveImage.classList.add('active');
+      }
+
+      updateProgressDots();
+    }
+
+    function next() {
+      index = (index + 1) % totalItems;
+      showItem(index);
+    }
+
+    function prev() {
+      index = (index - 1 + totalItems) % totalItems;
+      showItem(index);
+    }
+
+    // Crear corazones flotantes
+    function createFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('floating-heart');
+      heart.innerHTML = '💕';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+      heart.style.opacity = Math.random() * 0.5 + 0.3;
+      
+      document.getElementById('floatingHearts').appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 8000);
+    }
+
+    // Navegación con teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+
+    // Inicialización
+    createProgressDots();
+    
+    // Crear corazones flotantes cada 2 segundos
+    setInterval(createFloatingHeart, 2000);
+
+    // Auto-avance cada 4 segundos (opcional)
+    setInterval(() => {
+      next();
+    }, 4000);
+  </script>
+</body>
+</html>
